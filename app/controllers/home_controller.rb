@@ -1,5 +1,6 @@
 require 'alipay'
 class HomeController < ApplicationController
+  # 生成付款二维码
   def index
     @client = Alipay::Client.new(
       url: ENV['ALIPAY_API'],
@@ -7,7 +8,6 @@ class HomeController < ApplicationController
       app_private_key: ENV['APP_PRIVATE_KEY'],
       alipay_public_key: ENV['ALIPAY_PUBLIC_KEY']
     )
-    # logger.debug @client.inspect
     # 创建支付订单并取得订单信息
     response = @client.execute(
       method: 'alipay.trade.precreate',
@@ -22,10 +22,21 @@ class HomeController < ApplicationController
 
     # 提取二维码地址
     @qr_code = JSON.parse(response)["alipay_trade_precreate_response"]["qr_code"]
-    logger.debug @qr_code
-    # => 'https://qr.alipay.com/abcdefggfedcba'
-    # logger.debug '345678999919191919191919'
-    # logger.debug @haha
-    # logger.debug '345678999919191919191919'
   end
+
+  # 支付宝的 POST 回调地址
+  def notify
+    @client = Alipay::Client.new(
+      url: ENV['ALIPAY_API'],
+      app_id: ENV['APP_ID'],
+      app_private_key: ENV['APP_PRIVATE_KEY'],
+      alipay_public_key: ENV['ALIPAY_PUBLIC_KEY']
+    )
+
+    if @client.verify?(request.request_parameters)
+      logger.debug "--------------------------------回调成功!!!--------------------------------"
+      render plain: 'success'
+    end
+  end
+
 end

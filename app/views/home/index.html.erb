@@ -1,2 +1,6 @@
-<h1>Home#index</h1>
-<%= @qr_code %>
+<script src='/js/qrcode.min.js'></script>
+
+<div id="qrcode"></div>
+<script type="text/javascript">
+  new QRCode(document.getElementById("qrcode"), "<%= @qr_code %>");
+</script>
