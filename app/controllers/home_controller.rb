@@ -11,11 +11,11 @@ class HomeController < ApplicationController
     # 创建支付订单并取得订单信息
     response = @client.execute(
       method: 'alipay.trade.precreate',
-      notify_url: 'https://mystore.com/orders/20160401000000/notify',
+      notify_url: 'https://alipay-demo-private.herokuapp.com/notify',
       biz_content: JSON.generate({
-        out_trade_no: '20160401000000',
-        total_amount: '50.00',
-        subject: 'QR Code Test'
+        out_trade_no: Time.now.to_i,
+        total_amount: '12.33',
+        subject: 'QR Code 付款测试'
       }, ascii_only: true)
     )
     # => '{\"alipay_trade_precreate_response\":{\"code\"...'
