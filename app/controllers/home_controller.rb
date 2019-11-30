@@ -28,14 +28,17 @@ class HomeController < ApplicationController
 
   # 支付宝的 POST 回调地址
   def notify
-    @client = Alipay::Client.new(
+    @client2 = Alipay::Client.new(
       url: ENV['ALIPAY_API'],
       app_id: ENV['APP_ID'],
       app_private_key: ENV['APP_PRIVATE_KEY'],
       alipay_public_key: ENV['ALIPAY_PUBLIC_KEY']
     )
+    logger.debug '----看一下这里为什么会有问题1-----'
+    logger.debug @client2.inspect
+    logger.debug '----看一下这里为什么会有问题2-----'
 
-    if @client.verify?(request.request_parameters)
+    if @client2.verify?(request.request_parameters)
       logger.debug "--------------------------------回调成功!!!--------------------------------"
       render plain: 'success'
     end
