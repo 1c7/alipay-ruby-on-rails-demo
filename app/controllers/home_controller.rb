@@ -1,5 +1,7 @@
 require 'alipay'
 class HomeController < ApplicationController
+  skip_before_action :verify_authenticity_token # 这行很重要, 否则 notify 支付宝异步通知会 Can't verify CSRF token authenticity.
+
   # 生成付款二维码
   def index
     @client = Alipay::Client.new(
